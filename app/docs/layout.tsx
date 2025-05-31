@@ -73,7 +73,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
                 {
                   type: 'page',
                   name: 'Overview',
-                  url: `/docs/remote/${rootDoc.slug}`,
+                  url: `/docs/${rootDoc.slug}`,
                 },
                 // Add child pages
                 ...children
@@ -81,7 +81,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
                   .map(child => ({
                     type: 'page' as const,
                     name: child.title,
-                    url: `/docs/remote/${child.slug}`,
+                    url: `/docs/${child.slug}`,
                   }))
               ],
             });
@@ -90,7 +90,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
             remoteItems.push({
               type: 'page',
               name: rootDoc.title,
-              url: `/docs/remote/${rootDoc.slug}`,
+              url: `/docs/${rootDoc.slug}`,
             });
           }
         });
@@ -105,10 +105,10 @@ export default async function Layout({ children }: { children: ReactNode }) {
       children: [
         ...(localTree?.children || []),
         ...(remoteItems.length > 0 ? [
-          {
-            type: 'separator' as const,
-            name: 'Remote Content',
-          },
+          // {
+          //   type: 'separator' as const,
+          //   name: 'Remote Content',
+          // },
           ...remoteItems
         ] : [])
       ],

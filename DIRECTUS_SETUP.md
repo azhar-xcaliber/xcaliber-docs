@@ -73,91 +73,77 @@ Your documentation should now include both local MDX files and remote Directus c
 - **Local Content**: MDX files in your `/content` directory
 - **Remote Content**: Pages from your Directus `docs` collection
 
-## Creating Sub-Pages
+## How It Works (Sanity Pattern)
 
-To create hierarchical navigation with sub-pages, simply use forward slashes in your slug field:
+This integration follows the **Fumadocs Sanity pattern** for seamless content management:
 
-### For Parent Pages:
-```json
-{
-  "title": "Getting Started",
-  "slug": "getting-started",
-  "content": "# Getting Started\n\nThis is the parent page...",
-  "status": "published",
-  "category": "guides",
-  "order": 1
-}
-```
+### Content Resolution:
+1. **Local First**: When a page is requested, it first checks for local MDX content
+2. **Remote Fallback**: If no local content exists, it queries Directus for remote content
+3. **Unified URLs**: Both local and remote content use the same URL structure (`/docs/slug`)
 
-### For Child Pages:
-```json
-{
-  "title": "Installation",
-  "slug": "getting-started/installation",
-  "content": "# Installation\n\nHow to install...",
-  "status": "published",
-  "category": "guides",
-  "order": 1
-}
-```
+### Navigation Building:
+- **Dynamic Navigation**: Layout component builds navigation from both sources
+- **Category Grouping**: Remote content grouped by `category` field
+- **Ordering**: Pages sorted by `order` field within categories
 
-### For Deeper Nesting:
-```json
-{
-  "title": "Docker Setup",
-  "slug": "getting-started/installation/docker",
-  "content": "# Docker Setup\n\nHow to install with Docker...",
-  "status": "published",
-  "category": "guides",
-  "order": 1
-}
-```
-
-### Navigation Structure
-
-This creates navigation like:
-```
-📁 Getting Started
-  └── Overview (/docs/remote/getting-started)
-  └── Installation (/docs/remote/getting-started/installation)
-  └── Configuration (/docs/remote/getting-started/configuration)
-```
+### Key Benefits:
+- **Single Route**: Uses `app/docs/[[...slug]]/page.tsx` for all content
+- **No Prefixes**: Remote content appears at `/docs/slug` (not `/docs/remote/slug`)
+- **Seamless Experience**: Users can't distinguish between local and remote content
 
 ## Example Content
 
-### Simple Page (No Sub-pages)
+### Simple Remote Page:
 ```json
 {
-  "title": "Introduction",
-  "slug": "introduction",
-  "content": "# Introduction\n\nWelcome...",
+  "title": "API Authentication",
+  "slug": "api/authentication",
+  "content": "# API Authentication\n\nHow to authenticate with our API...",
   "status": "published",
-  "category": "guides",
+  "category": "API Reference",
   "order": 1
 }
 ```
 
-### Parent + Child Pages
+**Result**: Accessible at `/docs/api/authentication` alongside local content.
+
+### Multiple Pages in Category:
 ```json
-// Parent
+// Page 1
 {
-  "title": "API Reference",
-  "slug": "api-reference",
-  "content": "# API Reference\n\nOverview...",
+  "title": "Getting Started",
+  "slug": "getting-started",
+  "content": "# Getting Started\n\nWelcome...",
   "status": "published",
-  "category": "reference",
+  "category": "Guide",
   "order": 1
 }
 
-// Child
+// Page 2
 {
-  "title": "Authentication",
-  "slug": "api-reference/authentication",
-  "content": "# Authentication\n\nHow to authenticate...",
+  "title": "Installation",
+  "slug": "installation",
+  "content": "# Installation\n\nHow to install...",
   "status": "published",
-  "category": "reference",
-  "order": 1
+  "category": "Guide",
+  "order": 2
 }
 ```
 
-That's it! Just use forward slashes in the slug to create hierarchical navigation automatically.
+**Result**: Both appear under "Guide" section in navigation, ordered by `order` field.
+
+## Navigation Structure
+
+Example navigation with mixed content:
+```
+📚 Documentation
+├── 📄 Introduction (local MDX)
+├── 📄 Test Page (local MDX)
+├── ─── Remote Content ───
+├── 📄 Getting Started (remote)
+├── 📄 Installation (remote)
+└── 📄 API Authentication (remote)
+```
+
+That's it! The Sanity pattern provides seamless integration between local and remote content.
