@@ -115,7 +115,29 @@ export default async function Layout({ children }: { children: ReactNode }) {
     };
     
     return (
-      <DocsLayout tree={combinedTree} {...baseOptions}>
+      <DocsLayout tree={combinedTree} {...baseOptions}
+      sidebar={{
+        tabs: [
+          {
+            title: 'Product Documentation',
+            description: 'Explore our product documentation.',
+            // active for `/docs` and sub routes like `/docs/components`
+            url: '/docs/getting-started',
+            // active for `/docs/components` and sub routes like `/docs/components/button`
+            // optionally, you can specify a set of urls which activates the item
+            // urls: new Set(['/docs/test', '/docs/components']),
+          },
+          {
+            title: 'API Reference',
+            description: 'Browse our API documentation.',
+            // active for `/docs/api` and sub routes like `/docs/api/users`
+            url: '/apireference',
+            // optionally, you can specify a set of urls which activates the item
+            // urls: new Set(['/docs/test', '/docs/api']),
+          }
+        ],
+      }}
+      >
         {children}
       </DocsLayout>
     );
@@ -124,7 +146,20 @@ export default async function Layout({ children }: { children: ReactNode }) {
     
     // Fallback to local navigation only
     return (
-      <DocsLayout tree={source.pageTree} {...baseOptions}>
+      <DocsLayout tree={source.pageTree} {...baseOptions}
+      sidebar={{
+        tabs: [
+          {
+            title: 'Components',
+            description: 'Hello World!',
+            // active for `/docs/components` and sub routes like `/docs/components/button`
+            url: '/docs/components',
+            // optionally, you can specify a set of urls which activates the item
+            // urls: new Set(['/docs/test', '/docs/components']),
+          },
+        ],
+      }}
+      >
         {children}
       </DocsLayout>
     );
